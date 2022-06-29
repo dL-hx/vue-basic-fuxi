@@ -1,0 +1,41 @@
+<html>
+  <head>
+    <title>Vue.observable</title>
+    <script src="./../lib//vue-2.6.0.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      {{message}}
+      <button @click="change">Change</button>
+    </div>
+    <script>
+        // 1. 注册观察者
+      const state = Vue.observable({ message: 'Vue 2.6' })
+      const mutation = {
+        setMessage(value) {
+          state.message = value
+        }
+      }
+      new Vue({
+        el: '#root',
+        computed: {
+          message() {
+               // 2. 注入模板, 通过computed注入
+            return state.message
+          }
+        },
+        methods: {
+          change() {
+            // 3. mutation. setMessage ,更改其值,  触发双向同步
+            mutation.setMessage('Vue 3.0')
+          }
+        }
+      })
+
+      /* 
+      微型状态管理,   相当于局部的reducer
+      
+      */
+    </script>
+  </body>
+</html>
