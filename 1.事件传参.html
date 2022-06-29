@@ -1,0 +1,76 @@
+
+<html>
+  <head>
+    <title>$emit 和 $on</title>
+    <script src="./lib/vue-2.6.0.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <button @click="boost">触发事件</button>
+    </div>
+    <script>
+      new Vue({
+        el: '#root',
+        data() {
+          return {
+            message: 'hello vue'
+          }
+        },
+        created() {
+          // 1. 绑定事件
+          // this.$on('my_events', this.handleEvents)
+          // this.$on('my_events', this.handleEvents2)
+
+          // $on 方法可以为事件绑定多个事件监听
+
+          // 2. 绑定多个事件. 可以为数组绑定
+          // this.$on(['my_events',  'my_events2' ], this.handleEvents)
+
+          // console.log(this._events);
+
+
+          //  this.$on('my_events2', this.handleEvents2)
+          this.$on('my_events', this.handleEvents)
+          
+        },
+        methods: {
+          handleEvents(e) {
+            console.log(this.message, e)
+          },
+          handleEvents2(e) {
+            // 这里的e, 是形参,   传递来的 my params , 不是Event
+            console.log('handleEvents2', e)
+          },
+
+          boost() {
+            // 触发events,     my_events
+            this.$emit('my_events', 'my params') 
+            
+            // 触发events,     my_events2
+            // this.$emit('my_events2', 'my params')            
+          }
+        }
+      })
+      /* 
+        页面注册时,通过$on 挂载事件,
+        点击按钮时候, 触发, 挂载到全局的实例, 
+
+        然后,  走methods, 寻找对应方法,    传参
+
+        $on: 
+        1. 绑定单个事件
+        this.$on('my_events', this.handleEvents)
+        2. 绑定多个事件
+        2.1  this.$on('my_events', this.handleEvents)
+             this.$on('my_events', this.handleEvents2)
+        2.2 数组形式
+             this.$on(['my_events',  'my_events2' ], this.handleEvents)
+        3. 特殊字段
+        this._events: 获取vue 实例上绑定的事件
+        console.log(this._events);
+
+        4. e,  在这里是形参, 不是event,   用于接收从 $emit中传递的方法
+      */
+    </script>
+  </body>
+</html>

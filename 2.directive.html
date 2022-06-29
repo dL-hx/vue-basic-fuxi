@@ -1,0 +1,94 @@
+<html>
+  <head>
+    <title>directive 用法</title>
+    <script src="./lib/vue-2.6.0.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <div v-loading="isLoading">{{data}}</div>
+      <button @click="update">更新</button>
+    </div>
+    <script>
+     /*  Vue.directive('loading', {
+        update(el, binding, vnode) {
+          if (binding.value) {
+            const div = document.createElement('div')
+            div.innerText = '加载中...'
+            div.setAttribute('id', 'loading')
+            div.style.position = 'absolute'
+            div.style.left = 0
+            div.style.top = 0
+            div.style.width = '100%'
+            div.style.height = '100%'
+            div.style.display = 'flex'
+            div.style.justifyContent = 'center'
+            div.style.alignItems = 'center'
+            div.style.color = 'white'
+            div.style.background = 'rgba(0, 0, 0, .7)'
+            document.body.append(div)
+          } else {
+            document.body.removeChild(document.getElementById('loading'))
+          }
+        }
+      }) */
+
+      Vue.directive('loading',function update(el, binding, vnode) {
+          if (binding.value) {
+            const div = document.createElement('div')
+            div.innerText = '加载中...'
+            div.setAttribute('id', 'loading')
+            div.style.position = 'absolute'
+            div.style.left = 0
+            div.style.top = 0
+            div.style.width = '100%'
+            div.style.height = '100%'
+            div.style.display = 'flex'
+            div.style.justifyContent = 'center'
+            div.style.alignItems = 'center'
+            div.style.color = 'white'
+            div.style.background = 'rgba(0, 0, 0, .7)'
+            document.body.append(div)
+          } else {
+            const div = document.getElementById('loading')
+            // 确保loading div存在再去移除
+            div && document.body.removeChild(div)
+          }
+        })
+      new Vue({
+        el: '#root',
+        data() {
+          return {
+            isLoading: false,
+            data: ''
+          }
+        },
+        methods: {
+          update() {
+            this.isLoading = true
+            setTimeout(() => {
+              this.data = '用户数据'
+              this.isLoading = false
+            }, 3000)
+          }
+        }
+      })
+
+
+    /* 
+      为了避免侵入式代码,    
+      <button :visiable="isLoading">加载中</button>
+
+      使用指令v-loading ,  自定义指令
+
+      当dom, update时候,  动态创建 蒙板,  添加到body中,
+      当isLoading为false时候,   移除这个dom
+
+      最终实现无侵入式代码
+
+      ----------
+      后续可以将指令打包为npm 包之间进行引入
+
+    */
+    </script>
+  </body>
+</html>
